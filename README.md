@@ -38,11 +38,11 @@ docker-compose build
 ```
 docker-compose up -d
 ```
-## You can download the documentation at
+### You can download the documentation at
 
 http://localhost:52663/csp/docbook4/DocBook.UI.Page.cls
 
-## If the name of the new area dock4 does not suit you, you can create a new one with a different name in the terminal with the command:
+### If the name of the new area dock4 does not suit you, you can create a new one with a different name in the terminal with the command:
 ```
 docker-compose exec iris iris session iris
 
