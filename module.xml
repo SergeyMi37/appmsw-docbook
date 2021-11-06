@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25">
+<Document name="appmsw-docbook.ZPM">
+<Module>
+ <Name>appmsw-docbook</Name>
+  <Version>1.0.1</Version>
+  <Description>Importing docbook database from Ensemble 2018.1.4</Description>
+  <Default Name="newdbname" Value="docbook4" />
+  <Packaging>module</Packaging>
+	  <Keywords>docbook tools admin</Keywords>
+		<Author>
+		<Person>Mikhaylenko Sergey</Person>
+		<CopyrightDate>2021</CopyrightDate>
+		<License>MIT</License>
+		</Author>
+<SourcesRoot>src</SourcesRoot> 
+<Invokes>
+	<Invoke Class="appmsw.util.database" Method="Init" >
+	</Invoke>
+</Invokes>
+<Resource Name="appmsw.PKG"/> 
+<FileCopy Name="iris/" Target="${cspdir}docbook-zip/"/>
+</Module>
+</Document>
+</Export>
