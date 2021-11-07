@@ -41,16 +41,17 @@ ClassMethod initdb(name, sourcedb = "docbook", currentmodule = "appmsw-docbook")
 	write $System.Status.GetErrorText(##class(appmsw.util.database).CreateDBNS(name))
 	write $System.Status.GetErrorText(##class(appmsw.util.database).DismountDB(name,.Properties))
 	set TempDir=##class(%File).GetDirectory($zu(86))_"csp"_del_"docbook-zip"_del
-	if $zversion(1)=3 { //for Linux
-		set cmd="cd "_TempDir_" && unzip -q iris.zip"
-	}
-	else { //for Windows
-		set cmd="cd "_TempDir_" && powershell Expand-Archive -LiteralPath "_TempDir_"iris.zip -DestinationPath "_TempDir
-	}
-	write !,cmd,!
-	$$$ThrowOnError(##class(%ZPM.PackageManager.Developer.Utils).RunCommandViaZF(cmd,.tLog,.tErr))
-	hang 2
 	set from=TempDir_"mgr"_del_sourcedb_del_"iris.dat"
+	if '(##class(%Library.File).Exists(from)) { //
+		if $zversion(1)=3 { //for Linux
+			set cmd="cd "_TempDir_" && unzip -q iris.zip"
+		}
+		else { //for Windows
+			set cmd="cd "_TempDir_" && powershell Expand-Archive -LiteralPath "_TempDir_"iris.zip -DestinationPath "_TempDir
+		}
+		write !,cmd,!
+		$$$ThrowOnError(##class(%ZPM.PackageManager.Developer.Utils).RunCommandViaZF(cmd,.tLog,.tErr))
+	}
 	set to=$G(Properties("Directory"))_"IRIS.DAT"
 	write !,"Copy db from: "_from,!,"        to: "_to
 	set st=##class(%File).CopyFile(from, to,1)
@@ -442,7 +443,7 @@ ClassMethod CheckDatabaseExists(directory As %String) As %Status [ CodeMode = ex
 ##class(%File).Exists(directory_$Case($$$isWINDOWS,1:"\",:"/")_..#DATABASENAME)
 }
 
-/// w $system.Status.GetErrorText(##class(appmsw.util.database).DeleteDBNS("SWAGGERUI", 0))
+/// w $system.Status.GetErrorText(##class(appmsw.util.database).DeleteDBNS("SWAGGERUI"))
 ClassMethod DeleteDBNS(pNamespace) As %Status
 {
 	if $namespace=$ZCONVERT(pNamespace,"U") set $namespace="%SYS"
