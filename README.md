@@ -38,13 +38,13 @@ docker-compose build
 ```
 docker-compose up -d
 ```
-### You can download the documentation at
 
-http://localhost:52663/csp/docbook4/DocBook.UI.Page.cls
+### To create DOCBOOK2 database, you need to run:
 
-### If the name of the new area dock4 does not suit you, you can create a new one with a different name in the terminal with the command:
 ```
 docker-compose exec iris iris session iris
+
+
 
 USER>do ##class(appmsw.util.database).initdb("docbook18")
 
