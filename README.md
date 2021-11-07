@@ -39,7 +39,7 @@ docker-compose build
 docker-compose up -d
 ```
 
-### To create DOCBOOK2 database, you need to run:
+### To create DOCBOOK18 database, you need to run:
 
 ```
 docker-compose exec iris iris session iris
