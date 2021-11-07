@@ -3,7 +3,7 @@
 <Document name="appmsw-docbook.ZPM">
 <Module>
  <Name>appmsw-docbook</Name>
-  <Version>1.0.1</Version>
+  <Version>1.0.2</Version>
   <Description>Importing docbook database from Ensemble 2018.1.4</Description>
   <Default Name="newdbname" Value="docbook4" />
   <Packaging>module</Packaging>
