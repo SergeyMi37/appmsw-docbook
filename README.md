@@ -45,6 +45,11 @@ docker-compose up -d
 docker-compose exec iris iris session iris
 
 
+Node: ea68ea560856, Instance: IRIS
+
+USER>
+
+USER>
 
 USER>do ##class(appmsw.util.database).initdb("docbook18")
 
@@ -54,11 +59,14 @@ Creating Namespace docbook18... done!
 Creating Interoperability mappings ... done!
 Adding Interoperability SQL privileges ... done!
 Creating CSP Application ... done!
-...
-Copy db from: /irisdev/app/iris/mgr/docbook/iris.dat
+
+Copy db from: /usr/irissys/csp/docbook-zip/mgr/docbook/iris.dat
         to: /usr/irissys/mgr/docbook18/IRIS.DAT
-Copy web from: /irisdev/app/iris/csp/docbook
+Copy web from: /usr/irissys/csp/docbook-zip/csp/docbook
        to: /usr/irissys/csp/docbook18
-Load http://78e95e7e0a0d:52773/csp/docbook18/DocBook.UI.Page.cls
+Load http://ea68ea560856:52773/csp/docbook18/DocBook.UI.Page.cls
+
 
 ```
+### Load documentation:
+![](https://raw.githubusercontent.com/SergeyMi37/appmsw-docbook/master/doc/Screenshot_2.png)
