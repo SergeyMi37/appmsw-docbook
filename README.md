@@ -81,4 +81,4 @@ Creating Interoperability mappings ... done!
 Adding Interoperability SQL privileges ... done!
 Creating CSP Application ... done!
 ...
-Load http://ea68ea560856:52773/csp/ZENDemo.Home.cls
+Load http://ea68ea560856:52773/csp/samples2/ZENDemo.Home.cls
