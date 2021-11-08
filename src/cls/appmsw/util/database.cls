@@ -26,17 +26,57 @@ Parameter DATABASENAME = {$Select($Select($ZVersion["IRIS":1,1:0):"IRIS.DAT",1:"
 /// do ##class(appmsw.util.database).Init()
 ClassMethod Init() As %Status
 {
-	write !,"To create DOCBOOK2 database, you need to run:"
-	write !,"do ##class(appmsw.util.database).initdb(""docbook2"")"
+	write !,"To create DOCBOOK2 or SAMPLES2 database, you need to run:"
+	write !,"do ##class(appmsw.util.database).CreateDbFromZip(""docbook2"",""docbook"")"
+	write !,"do ##class(appmsw.util.database).CreateDbFromZip(""samples2"",""samples"")"
 	quit $$$OK
 }
 
-/// do ##class(appmsw.util.database).initdb("docbook2","docbook")
-/// do ##class(appmsw.util.database).initdb("docbook3","docbook")
-ClassMethod initdb(name, sourcedb = "docbook", currentmodule = "appmsw-docbook") As %Status
+/// do ##class(appmsw.util.database).CreateDbFromZip("samples2","samples")
+/// do ##class(appmsw.util.database).CreateDbFromZip("docbook3","docbook")
+ClassMethod CreateDbFromZip(name, sourcedb = "docbook") As %Status
 {
-	
-	write !,"Creating "_name_" db, namespace, resource and role with one command",!
+	//<FileCopy Name="db-zip/" Target="${mgrdir}db-zip/"/>
+	write !,"Creating "_name_" db, namespace, resource, role and CSPapplication",!
+	set del = $Case($$$isWINDOWS,1:"\",:"/")
+	write $System.Status.GetErrorText(##class(appmsw.util.database).CreateDBNS(name))
+	write $System.Status.GetErrorText(##class(appmsw.util.database).DismountDB(name,.Properties))
+	set DbZipDir=##class(%File).GetDirectory($zu(86))_"mgr"_del_"db-zip"_del
+	set from=DbZipDir_"mgr"_del_sourcedb_del_"iris.dat"
+	if '(##class(%Library.File).Exists(from)) { //
+		if $zversion(1)=3 { //for Linux
+			set cmd="cd "_DbZipDir_" && unzip -q mgr.zip && unzip -q csp.zip"
+		}
+		else { //for Windows
+			set cmd="cd "_DbZipDir_" && powershell Expand-Archive -LiteralPath "_DbZipDir_"mgr.zip -DestinationPath "_DbZipDir_" && powershell Expand-Archive -LiteralPath "_DbZipDir_"csp.zip -DestinationPath "_DbZipDir
+		}
+		write !,cmd,!
+		$$$ThrowOnError(##class(%ZPM.PackageManager.Developer.Utils).RunCommandViaZF(cmd,.tLog,.tErr))
+	}
+	set to=$G(Properties("Directory"))_"IRIS.DAT"
+	write !,"Copy db from: "_from,!,"        to: "_to
+	h 2
+	set st=##class(%File).CopyFile(from, to,1)
+	if 'st write !,$system.Status.GetErrorText(st) quit st
+	write $System.Status.GetErrorText(##class(appmsw.util.database).MountDB(name))
+	//zn name
+ 	//do $system.OBJ.Upgrade()
+	//do $system.OBJ.CompileAll("cfk-u-d")
+	set from=DbZipDir_"csp"_del_sourcedb
+	set to= ##class(%File).GetDirectory($zu(86))_"csp"_del_name
+	write !,"Copy web from: "_from,!,"       to: "_to
+	set st=##class(%File).CopyDir(from, to,1)
+	if st,##class(appmsw.util.database).GetUrl(.url) {
+		if sourcedb="docbook" write !,"Load "_url_"/csp/"_name_"/DocBook.UI.Page.cls"
+		else  write !,"Load "_url_"/csp/"_name_"/menu.csp"
+	}
+	quit st
+}
+
+/// do ##class(appmsw.util.database).initdb("docbook3","docbook")
+ClassMethod initdb(name, sourcedb = "docbook") As %Status
+{
+	write !,"Creating "_name_" db, namespace, resource, role and CSPapplication",!
 	set del = $Case($$$isWINDOWS,1:"\",:"/")
 	write $System.Status.GetErrorText(##class(appmsw.util.database).CreateDBNS(name))
 	write $System.Status.GetErrorText(##class(appmsw.util.database).DismountDB(name,.Properties))
@@ -54,8 +94,9 @@ ClassMethod initdb(name, sourcedb = "docbook", currentmodule = "appmsw-docbook")
 	}
 	set to=$G(Properties("Directory"))_"IRIS.DAT"
 	write !,"Copy db from: "_from,!,"        to: "_to
+	h 2
 	set st=##class(%File).CopyFile(from, to,1)
-	if 'st quit st
+	if 'st write !,$system.Status.GetErrorText(st) quit st
 	write $System.Status.GetErrorText(##class(appmsw.util.database).MountDB(name))
 	//zn name
  	//do $system.OBJ.Upgrade()
@@ -66,22 +107,6 @@ ClassMethod initdb(name, sourcedb = "docbook", currentmodule = "appmsw-docbook")
 	set st=##class(%File).CopyDir(from, to,1)
 	if st,##class(appmsw.util.database).GetUrl(.url) write !,"Load "_url_"/csp/"_name_"/DocBook.UI.Page.cls"
 	quit st
-}
-
-/// do ##class(appmsw.util.database).test()
-ClassMethod test() As %Status
-{
-	new $namespace
-	set $namespace="%SYS"
-	set Status=##Class(Config.Startup).Get(.Properties)
-	if Status s ServerPort="http://"_$zu(110)_":"_$g(Properties("WebServerPort"),52773) write !
-	
-	set del = $Case($$$isWINDOWS,1:"\",:"/")
-	set from="d:\_proj\_mygirhub\docbook\iris\csp\docbook"
-	set to= ##class(%File).GetDirectory($zu(86))_"csp"_del_"docbook"
-	write $System.Status.GetErrorText(##class(%File).CopyDir(from, to,1))
-	
-	quit $$$OK
 }
 
 /// do ##class(appmsw.util.database).GetUrl(.url)
@@ -240,7 +265,7 @@ ClassMethod DeleteResource(dbName As %String) As %Status
 	if ##class(Security.Resources).Exists(nameR) {
 		Set sc = $$$ADDSC(sc,##class(Security.Resources).Delete(nameR))
 		Quit:$$$ISERR(sc) sc
-		w !,"Delete Resource "_nameR
+		write !,"Delete Resource "_nameR
 	}
 	Return sc
 }
@@ -443,7 +468,7 @@ ClassMethod CheckDatabaseExists(directory As %String) As %Status [ CodeMode = ex
 ##class(%File).Exists(directory_$Case($$$isWINDOWS,1:"\",:"/")_..#DATABASENAME)
 }
 
-/// w $system.Status.GetErrorText(##class(appmsw.util.database).DeleteDBNS("SWAGGERUI"))
+/// write $system.Status.GetErrorText(##class(appmsw.util.database).DeleteDBNS("SWAGGERUI"))
 ClassMethod DeleteDBNS(pNamespace) As %Status
 {
 	if $namespace=$ZCONVERT(pNamespace,"U") set $namespace="%SYS"

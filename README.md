@@ -47,11 +47,7 @@ docker-compose exec iris iris session iris
 
 Node: ea68ea560856, Instance: IRIS
 
-USER>
-
-USER>
-
-USER>do ##class(appmsw.util.database).initdb("docbook18")
+USER>do ##class(appmsw.util.database).CreateDbFromZip("docbook18","docbook")
 
 Creating docbook18 db, namespace, resource and role with one command
 Creating Database docbook18... done!
@@ -70,3 +66,19 @@ Load http://ea68ea560856:52773/csp/docbook18/DocBook.UI.Page.cls
 ```
 ### Load documentation:
 ![](https://raw.githubusercontent.com/SergeyMi37/appmsw-docbook/master/doc/Screenshot_2.png)
+
+
+### To create SAMPLES2 database, you need to run:
+
+```
+...
+USER>do ##class(appmsw.util.database).CreateDbFromZip("samples2","samples")
+
+Creating samples2 db, namespace, resource and role with one command
+Creating Database samples2... done!
+Creating Namespace samples2... done!
+Creating Interoperability mappings ... done!
+Adding Interoperability SQL privileges ... done!
+Creating CSP Application ... done!
+...
+Load http://ea68ea560856:52773/csp/ZENDemo.Home.cls
