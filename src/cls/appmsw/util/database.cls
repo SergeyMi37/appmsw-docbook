@@ -61,14 +61,14 @@ ClassMethod CreateDbFromZip(name, sourcedb = "docbook") As %Status
 	write $System.Status.GetErrorText(##class(appmsw.util.database).MountDB(name))
 	//zn name
  	//do $system.OBJ.Upgrade()
-	//do $system.OBJ.CompileAll("cfk-u-d")
+	//do $system.OBJ.CompileAll("cfk-u-d",.err)
 	set from=DbZipDir_"csp"_del_sourcedb
 	set to= ##class(%File).GetDirectory($zu(86))_"csp"_del_name
 	write !,"Copy web from: "_from,!,"       to: "_to
 	set st=##class(%File).CopyDir(from, to,1)
 	if st,##class(appmsw.util.database).GetUrl(.url) {
 		if sourcedb="docbook" write !,"Load "_url_"/csp/"_name_"/DocBook.UI.Page.cls"
-		else  write !,"Load "_url_"/csp/"_name_"/menu.csp"
+		else  write !,"Load "_url_"/csp/"_name_"/ZENDemo.Home.cls"
 	}
 	quit st
 }
