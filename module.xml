@@ -3,8 +3,10 @@
 <Document name="appmsw-docbook.ZPM">
 <Module>
  <Name>appmsw-docbook</Name>
- <Version>1.0.3</Version>
- <Description>Importing docbook database from Ensemble 2018.1.4</Description>
+ <Version>1.0.4</Version>
+ <Description>Importing docbook database from Ensemble 2018.1.4. 
+ An example of deploying a solution with databases from the archive.
+(Can be expanded without source codes)</Description>
  <Packaging>module</Packaging>
 	  <Keywords>docbook tools admin database</Keywords>
 		<Author>

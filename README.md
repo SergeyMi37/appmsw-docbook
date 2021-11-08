@@ -4,6 +4,7 @@
 [![license](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 An application for installation into your instance of the DoсBook database, which is no longer supplied with IRIS, but sometimes it is very necessary, at least as a local documentation.
+An example of deploying a solution with databases from the archive. (Can be expanded without source codes).
 
 ## Installation with ZPM
 
