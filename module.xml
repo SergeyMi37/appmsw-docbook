@@ -3,10 +3,8 @@
 <Document name="appmsw-docbook.ZPM">
 <Module>
  <Name>appmsw-docbook</Name>
- <Version>1.0.4</Version>
- <Description>Importing docbook database from Ensemble 2018.1.4. 
- An example of deploying a solution with databases from the archive.
-(Can be expanded without source codes)</Description>
+ <Version>1.0.5</Version>
+ <Description>Importing docbook database from Ensemble 2018.1.4.</Description>
  <Packaging>module</Packaging>
 	  <Keywords>docbook tools admin database</Keywords>
 		<Author>
@@ -14,8 +12,11 @@
 		<CopyrightDate>2021</CopyrightDate>
 		<License>MIT</License>
 		<Notes>
-			https://github.com/SergeyMi37/appmsw-docbook
-		</Notes>
+			repository:
+				https://github.com/SergeyMi37/appmsw-docbook
+			description:
+				An example of deploying a solution with databases from the archive. (Can be expanded without source codes).
+			</Notes>
 		</Author>
 	<SourcesRoot>src</SourcesRoot> 
 	<Invokes>
