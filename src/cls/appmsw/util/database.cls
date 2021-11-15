@@ -53,7 +53,7 @@ ClassMethod CreateDbFromZip(name, sourcedb = "docbook") As %Status
 		if $zversion(1)=3 { //for Linux
 #;			set cmd="cd "_DbZipDir_" && unzip -q mgr.zip && unzip -q csp.zip"
 #; allow overloading just in case 
-			set cmd="cd "_DbZipDir_" && unzip -q mgr.zip && unzip -q csp.zip"
+			set cmd="cd "_DbZipDir_" && unzip -oq mgr.zip && unzip -oq csp.zip"
 		}
 		else { //for Windows
 			set cmd="cd "_DbZipDir_" && powershell Expand-Archive -LiteralPath "_DbZipDir_"mgr.zip -DestinationPath "_DbZipDir_" && powershell Expand-Archive -LiteralPath "_DbZipDir_"csp.zip -DestinationPath "_DbZipDir
