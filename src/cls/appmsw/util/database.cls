@@ -42,10 +42,18 @@ ClassMethod CreateDbFromZip(name, sourcedb = "docbook") As %Status
 	write $System.Status.GetErrorText(##class(appmsw.util.database).CreateDBNS(name))
 	write $System.Status.GetErrorText(##class(appmsw.util.database).DismountDB(name,.Properties))
 	set DbZipDir=##class(%File).GetDirectory($zu(86))_"mgr"_del_"db-zip"_del
-	set from=DbZipDir_"mgr"_del_sourcedb_del_"iris.dat"
-	if '(##class(%Library.File).Exists(from)) { //
+	
+#;	set from=DbZipDir_"mgr"_del_sourcedb_del_"iris.dat"
+#;	if '(##class(%Library.File).Exists(from)) { //
+#;	
+#; existing dir signals unzip is done already	
+	set fdir=DbZipDir_"mgr"_del_sourcedb_del
+	if '##class(%Library.File).DirectoryExists(fdir) {
+#;
 		if $zversion(1)=3 { //for Linux
-			set cmd="cd "_DbZipDir_" && unzip -q mgr.zip && unzip -q csp.zip"
+#;			set cmd="cd "_DbZipDir_" && unzip -q mgr.zip && unzip -q csp.zip"
+#; allow overloading just in case 
+			set cmd="cd "_DbZipDir_" && unzip -oq mgr.zip && unzip -oq csp.zip"
 		}
 		else { //for Windows
 			set cmd="cd "_DbZipDir_" && powershell Expand-Archive -LiteralPath "_DbZipDir_"mgr.zip -DestinationPath "_DbZipDir_" && powershell Expand-Archive -LiteralPath "_DbZipDir_"csp.zip -DestinationPath "_DbZipDir
@@ -53,6 +61,10 @@ ClassMethod CreateDbFromZip(name, sourcedb = "docbook") As %Status
 		write !,cmd,!
 		$$$ThrowOnError(##class(%ZPM.PackageManager.Developer.Utils).RunCommandViaZF(cmd,.tLog,.tErr))
 	}
+#; check case of from for Linux but this works also for Window 		
+	set IRIS="IRIS.DAT",iris="iris.dat"
+	set from=fdir_$S(##class(%Library.File).Exists(fdir_IRIS):IRIS,1:iris)
+#;	
 	set to=$G(Properties("Directory"))_"IRIS.DAT"
 	write !,"Copy db from: "_from,!,"        to: "_to
 	h 2
